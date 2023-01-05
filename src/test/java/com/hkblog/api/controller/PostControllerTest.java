@@ -23,7 +23,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @AutoConfigureMockMvc
 @SpringBootTest
-class PostControllerTest  {
+class PostControllerTest {
 
     @Autowired
     MockMvc mockMvc;
@@ -39,20 +39,9 @@ class PostControllerTest  {
         postRepository.deleteAll();
     }
 
-
-    @Test
-    @DisplayName("/posts 요청시 Hello World를 출력한다.")
-    void test() throws Exception {
-        // expected
-        mockMvc.perform(get("/posts"))
-                .andExpect(status().isOk())
-                .andExpect(content().string("Hello World"))
-                .andDo(print());
-    }
-
     @Test
     @DisplayName("/posts 요청시 primary-key 반환한다.")
-    void test2() throws Exception {
+    void test1() throws Exception {
         //given
         PostCreate request = PostCreate.builder()
                 .title("제목입니다.")
@@ -73,7 +62,7 @@ class PostControllerTest  {
 
     @Test
     @DisplayName("/posts 요청시 title 값은 필수다.")
-    void test3() throws Exception {
+    void test2() throws Exception {
         //given
         PostCreate request = PostCreate.builder()
 //                .title("제목입니다.")
@@ -95,7 +84,7 @@ class PostControllerTest  {
 
     @Test
     @DisplayName("/posts 요청시 DB에 값이 저장된다.")
-    void test4() throws Exception {
+    void test3() throws Exception {
         //given
         PostCreate request = PostCreate.builder()
                 .title("제목입니다.")
@@ -120,4 +109,23 @@ class PostControllerTest  {
         assertEquals("내용입니다.", post.getContent());
     }
 
+    @Test
+    @DisplayName("글 1개 조회")
+    void test4() throws Exception {
+        // given
+        Post post = Post.builder()
+                .title("123456789012345")
+                .content("bar")
+                .build();
+        postRepository.save(post);
+
+        // expected
+        mockMvc.perform(get("/posts/{postId}", post.getId())
+                        .contentType(APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(post.getId()))
+                .andExpect(jsonPath("$.title").value("123456789012345"))
+                .andExpect(jsonPath("$.content").value("bar"))
+                .andDo(print());
+    }
 }
