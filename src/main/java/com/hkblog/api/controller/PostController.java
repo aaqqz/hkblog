@@ -1,15 +1,15 @@
 package com.hkblog.api.controller;
 
-import com.hkblog.api.domain.Post;
 import com.hkblog.api.request.PostCreate;
+import com.hkblog.api.response.PostResponse;
 import com.hkblog.api.service.PostService;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 import java.util.Map;
 
 @Slf4j
@@ -26,14 +26,12 @@ public class PostController {
     }
 
     @GetMapping("/posts/{postId}")
-    public Post get(@PathVariable(name = "postId") Long id) {
-        Post post = postService.get(id);
-        return post;
+    public PostResponse get(@PathVariable Long postId) {
+        return postService.get(postId);
     }
 
-    @GetMapping("/posts/{postId}/rss")
-    public Post getRss(@PathVariable(name = "postId") Long id) {
-        Post post = postService.get(id);
-        return post;
+    @GetMapping("/posts")
+    public List<PostResponse> getList() {
+        return postService.getList();
     }
 }
