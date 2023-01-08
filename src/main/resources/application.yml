@@ -16,4 +16,9 @@ spring:
     password:
     driver-class-name: org.h2.Driver
 
+  data:
+    web:
+      pageable:
+        one-indexed-parameters: true
+
 
