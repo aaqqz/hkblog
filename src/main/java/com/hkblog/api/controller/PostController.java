@@ -1,11 +1,11 @@
 package com.hkblog.api.controller;
 
 import com.hkblog.api.request.PostCreate;
+import com.hkblog.api.request.PostSearch;
 import com.hkblog.api.response.PostResponse;
 import com.hkblog.api.service.PostService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,7 +21,7 @@ public class PostController {
     private final PostService postService;
 
     @PostMapping("/posts")
-    public Map<String, Long> post(@RequestBody @Valid @NotNull PostCreate request) {
+    public Map<String, Long> post(@RequestBody @Valid PostCreate request) {
         Long postId = postService.write(request);
         return Map.of("postId", postId);
     }
@@ -32,7 +32,7 @@ public class PostController {
     }
 
     @GetMapping("/posts")
-    public List<PostResponse> getList(Pageable pageable) {
-        return postService.getList(pageable);
+    public List<PostResponse> getList(@RequestParam PostSearch postSearch) {
+        return postService.getList(postSearch);
     }
 }

@@ -3,10 +3,10 @@ package com.hkblog.api.service;
 import com.hkblog.api.domain.Post;
 import com.hkblog.api.repository.PostRepository;
 import com.hkblog.api.request.PostCreate;
+import com.hkblog.api.request.PostSearch;
 import com.hkblog.api.response.PostResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -41,11 +41,14 @@ public class PostService {
                 .build();
     }
 
-    public List<PostResponse> getList(Pageable pageable) {
+    public List<PostResponse> getList(PostSearch postSearch) {
+        // postRepository
+//        return postRepository.findAll(pageable).stream()
+//                .map(post -> new PostResponse(post))
+//                .collect(Collectors.toList());
 
-        //Pageable pageable = PageRequest.of(page, 5, Sort.by(Sort.Direction.DESC, "id"));
-
-        return postRepository.findAll(pageable).stream()
+        // postRepositoryCustom
+        return postRepository.getList(postSearch).stream()
                 .map(post -> new PostResponse(post))
                 .collect(Collectors.toList());
     }
