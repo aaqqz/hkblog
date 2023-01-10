@@ -121,7 +121,7 @@ class PostControllerTest {
         // given
         Post post = Post.builder()
                 .title("123456789012345")
-                .content("bar")
+                .content("내용")
                 .build();
         postRepository.save(post);
 
@@ -131,7 +131,7 @@ class PostControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(post.getId()))
                 .andExpect(jsonPath("$.title").value("1234567890"))
-                .andExpect(jsonPath("$.content").value("bar"))
+                .andExpect(jsonPath("$.content").value("내용"))
                 .andDo(print());
     }
 
@@ -188,14 +188,14 @@ class PostControllerTest {
     void test7() throws Exception {
         // given
         Post post = Post.builder()
-                .title("제목 Default")
-                .content("내용 Default")
+                .title("제목")
+                .content("내용")
                 .build();
         postRepository.save(post);
 
         PostEdit postEdit = PostEdit.builder()
                 .title("제목 Change")
-                .content("내용 Default")
+                .content("내용")
                 .build();
 
         // expected
@@ -206,4 +206,20 @@ class PostControllerTest {
                 .andDo(print());
     }
 
+    @Test
+    @DisplayName("게시글 삭제")
+    void test8() throws Exception {
+        // given
+        Post post = Post.builder()
+                .title("제목")
+                .content("내용")
+                .build();
+        postRepository.save(post);
+
+        // expected
+        mockMvc.perform(delete("/posts/{postId}", post.getId())
+                        .contentType(APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andDo(print());
+    }
 }

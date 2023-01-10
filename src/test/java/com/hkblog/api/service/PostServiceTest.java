@@ -59,8 +59,8 @@ class PostServiceTest {
     void test2() {
         // given
         Post requestPost = Post.builder()
-                .title("foo")
-                .content("bar")
+                .title("제목")
+                .content("내용")
                 .build();
         postRepository.save(requestPost);
 
@@ -70,8 +70,8 @@ class PostServiceTest {
         // then
         assertNotNull(postResponse);
         assertEquals(1L, postRepository.count());
-        assertEquals("foo", postResponse.getTitle());
-        assertEquals("bar", postResponse.getContent());
+        assertEquals("제목", postResponse.getTitle());
+        assertEquals("내용", postResponse.getContent());
     }
 
     @Test
@@ -196,5 +196,23 @@ class PostServiceTest {
 
         assertEquals("제목", changedPost.getTitle());
         assertEquals("내용", changedPost.getContent());
+    }
+
+    @Test
+    @DisplayName("게시글 삭제")
+    void test7() {
+        // given
+        Post post = Post.builder()
+                .title("제목")
+                .content("내용")
+                .build();
+
+        postRepository.save(post);
+
+        // when
+        postService.delete(post.getId());
+
+        // then
+        assertEquals(0, postRepository.count());
     }
 }
