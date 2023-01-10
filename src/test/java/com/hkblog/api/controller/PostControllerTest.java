@@ -2,8 +2,11 @@ package com.hkblog.api.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hkblog.api.domain.Post;
+import com.hkblog.api.domain.PostEditor;
 import com.hkblog.api.repository.PostRepository;
 import com.hkblog.api.request.PostCreate;
+//import com.hkblog.api.request.PostEdit;
+import com.hkblog.api.request.PostEdit;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -19,15 +22,14 @@ import java.util.stream.IntStream;
 import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 // @WebMvcTest // MockMvc 로 간단한 http 요청 test 가능 (@SpringBootTest 와 같이 사용 불가, 같이 사용을 위해 @AutoConfigureMockMvc 추가함)
 
-@AutoConfigureMockMvc
 @SpringBootTest
+@AutoConfigureMockMvc
 class PostControllerTest {
 
     @Autowired
@@ -61,16 +63,15 @@ class PostControllerTest {
 //                        .content("{\"title\": \"제목입니다.\", \"content\": \"내용입니다.\"}")
                         .content(json))
                 .andExpect(status().isOk())
-                .andExpect(content().string("{\"postId\":1}"))
+                .andExpect(jsonPath("$.postId").value("1"))
                 .andDo(print());
     }
 
     @Test
-    @DisplayName("/posts 요청시 title 값은 필수다.")
+    @DisplayName("/posts 요청시 title값은 필수다.")
     void test2() throws Exception {
-        //given
+        // given
         PostCreate request = PostCreate.builder()
-//                .title("제목입니다.")
                 .content("내용입니다.")
                 .build();
 
@@ -138,25 +139,71 @@ class PostControllerTest {
     @DisplayName("글 1페이지 조회")
     void test5() throws Exception {
         // given
-        List<Post> requestPosts = IntStream.range(1, 31)
-                .mapToObj(i -> {
-                    return Post.builder()
+        List<Post> requestPosts = IntStream.range(0, 20)
+                .mapToObj(i -> Post.builder()
                             .title("제목 " + i)
                             .content("내용 " + i)
-                            .build();
-                })
+                            .build()
+                )
                 .collect(Collectors.toList());
 
         postRepository.saveAll(requestPosts);
 
         // expected
-        mockMvc.perform(get("/posts?page=1&sort=id,desc&size=5")
+        mockMvc.perform(get("/posts?page=1&size=10")
                         .contentType(APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.length()", is(5)))
-                .andExpect(jsonPath("$[0].id").value(30))
-                .andExpect(jsonPath("$[0].title").value("제목 30"))
-                .andExpect(jsonPath("$[0].content").value("내용 30"))
+                .andExpect(jsonPath("$.length()", is(10)))
+                .andExpect(jsonPath("$[0].title").value("제목 19"))
+                .andExpect(jsonPath("$[0].content").value("내용 19"))
                 .andDo(print());
     }
+
+    @Test
+    @DisplayName("페이지를 0으로 요청해도 첫 페이지를 가져온다.")
+    void test6() throws Exception {
+        // given
+        List<Post> requestPosts = IntStream.range(0, 20)
+                .mapToObj(i -> Post.builder()
+                            .title("제목 " + i)
+                            .content("내용 " + i)
+                            .build()
+                )
+                .collect(Collectors.toList());
+
+        postRepository.saveAll(requestPosts);
+
+        // expected
+        mockMvc.perform(get("/posts?page=1&size=10")
+                        .contentType(APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.length()", is(10)))
+                .andExpect(jsonPath("$[0].title").value("제목 19"))
+                .andExpect(jsonPath("$[0].content").value("내용 19"))
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("글 제목 수정")
+    void test7() throws Exception {
+        // given
+        Post post = Post.builder()
+                .title("제목 Default")
+                .content("내용 Default")
+                .build();
+        postRepository.save(post);
+
+        PostEdit postEdit = PostEdit.builder()
+                .title("제목 Change")
+                .content("내용 Default")
+                .build();
+
+        // expected
+        mockMvc.perform(patch("/posts/{postId}", post.getId())
+                        .contentType(APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(postEdit)))
+                .andExpect(status().isOk())
+                .andDo(print());
+    }
+
 }

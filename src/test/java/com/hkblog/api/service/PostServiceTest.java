@@ -3,6 +3,7 @@ package com.hkblog.api.service;
 import com.hkblog.api.domain.Post;
 import com.hkblog.api.repository.PostRepository;
 import com.hkblog.api.request.PostCreate;
+import com.hkblog.api.request.PostEdit;
 import com.hkblog.api.request.PostSearch;
 import com.hkblog.api.response.PostResponse;
 import org.junit.jupiter.api.BeforeEach;
@@ -105,7 +106,6 @@ class PostServiceTest {
 
         PostSearch postSearch = PostSearch.builder()
                 .page(1)
-                .size(10)
                 .build();
 
         // when
@@ -115,5 +115,86 @@ class PostServiceTest {
         assertEquals(10L, posts.size());
         assertEquals("제목 19", posts.get(0).getTitle());
         assertEquals("제목 10", posts.get(9).getTitle());
+    }
+
+    @Test
+    @DisplayName("글 제목 수정")
+    void test4() {
+        // given
+        Post post = Post.builder()
+                .title("제목")
+                .content("내용")
+                .build();
+
+        postRepository.save(post);
+
+        PostEdit postEdit = PostEdit.builder()
+                .title("제목 Change")
+                .content("내용")
+                .build();
+
+        // when
+        postService.edit(post.getId(), postEdit);
+
+        // then
+        Post changedPost = postRepository.findById(post.getId())
+                .orElseThrow(() -> new IllegalArgumentException("글이 존재하지 않습니다. id=" + post.getId()));
+
+        assertEquals("제목 Change", changedPost.getTitle());
+        assertEquals("내용", changedPost.getContent());
+    }
+
+    @Test
+    @DisplayName("글 내용 수정")
+    void test5() {
+        // given
+        Post post = Post.builder()
+                .title("제목")
+                .content("내용")
+                .build();
+
+        postRepository.save(post);
+
+        PostEdit postEdit = PostEdit.builder()
+                .title("제목")
+                .content("내용 Change")
+                .build();
+
+        // when
+        postService.edit(post.getId(), postEdit);
+
+        // then
+        Post changedPost = postRepository.findById(post.getId())
+                .orElseThrow(() -> new IllegalArgumentException("글이 존재하지 않습니다. id=" + post.getId()));
+
+        assertEquals("제목", changedPost.getTitle());
+        assertEquals("내용 Change", changedPost.getContent());
+    }
+
+    @Test
+    @DisplayName("글 제목 수정 null")
+    void test6() {
+        // given
+        Post post = Post.builder()
+                .title("제목")
+                .content("내용")
+                .build();
+
+        postRepository.save(post);
+
+        PostEdit postEdit = PostEdit.builder()
+                .title(null)
+                .content("내용")
+                .build();
+
+        // when
+        postService.edit(post.getId(), postEdit);
+
+        // then
+        Post changedPost = postRepository.findById(post.getId())
+                .orElseThrow(() -> new IllegalArgumentException("글이 존재하지 않습니다. id=" + post.getId()));
+
+        assertEquals("제목", changedPost.getTitle());
+        assertEquals("내용", changedPost.getContent());
     }
 }
