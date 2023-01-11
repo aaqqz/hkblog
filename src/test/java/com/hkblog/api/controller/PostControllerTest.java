@@ -141,9 +141,9 @@ class PostControllerTest {
         // given
         List<Post> requestPosts = IntStream.range(0, 20)
                 .mapToObj(i -> Post.builder()
-                            .title("제목 " + i)
-                            .content("내용 " + i)
-                            .build()
+                        .title("제목 " + i)
+                        .content("내용 " + i)
+                        .build()
                 )
                 .collect(Collectors.toList());
 
@@ -165,9 +165,9 @@ class PostControllerTest {
         // given
         List<Post> requestPosts = IntStream.range(0, 20)
                 .mapToObj(i -> Post.builder()
-                            .title("제목 " + i)
-                            .content("내용 " + i)
-                            .build()
+                        .title("제목 " + i)
+                        .content("내용 " + i)
+                        .build()
                 )
                 .collect(Collectors.toList());
 
@@ -222,4 +222,51 @@ class PostControllerTest {
                 .andExpect(status().isOk())
                 .andDo(print());
     }
+
+    @Test
+    @DisplayName("존재하지 않는 게시글 조회")
+    void test9() throws Exception {
+        // expected
+        mockMvc.perform(delete("/posts/{postId}", 1L)
+                        .contentType(APPLICATION_JSON))
+                .andExpect(status().isNotFound())
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("존재하지 않는 게시글 수정")
+    void test10() throws Exception {
+        // given
+        PostEdit postEdit = PostEdit.builder()
+                .title("제목")
+                .content("내용")
+                .build();
+
+        // expected
+        mockMvc.perform(patch("/posts/{postId}", 1L)
+                        .contentType(APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(postEdit)))
+                .andExpect(status().isNotFound())
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("게시글 작성시 제목에 '바보'는 포함될 수 없다.")
+    void test11() throws Exception {
+        //given
+        PostCreate request = PostCreate.builder()
+                .title("제목에 바보는 안된다.")
+                .content("내용")
+                .build();
+
+        String json = objectMapper.writeValueAsString(request);
+
+        // expected
+        mockMvc.perform(post("/posts")
+                        .contentType(APPLICATION_JSON)
+                        .content(json))
+                .andExpect(status().isBadRequest())
+                .andDo(print());
+    }
+
 }

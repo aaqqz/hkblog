@@ -1,5 +1,6 @@
 package com.hkblog.api.controller;
 
+import com.hkblog.api.exception.InvalidRequest;
 import com.hkblog.api.request.PostCreate;
 import com.hkblog.api.request.PostEdit;
 import com.hkblog.api.request.PostSearch;
@@ -22,6 +23,8 @@ public class PostController {
 
     @PostMapping("/posts")
     public Map<String, Long> post(@RequestBody @Valid PostCreate request) {
+        request.validate();
+
         Long postId = postService.write(request);
         return Map.of("postId", postId);
     }
