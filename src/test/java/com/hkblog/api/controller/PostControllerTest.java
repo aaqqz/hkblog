@@ -271,7 +271,7 @@ class PostControllerTest {
 
     @Test
     @DisplayName("test")
-    void test12() {
+    void test() {
 
     }
 
