@@ -269,4 +269,10 @@ class PostControllerTest {
                 .andDo(print());
     }
 
+    @Test
+    @DisplayName("test")
+    void test12() {
+
+    }
+
 }
