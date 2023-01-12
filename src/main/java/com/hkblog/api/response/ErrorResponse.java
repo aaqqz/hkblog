@@ -35,6 +35,9 @@ public class ErrorResponse {
     }
 
     public void addValidation(String fieldName, String errorMessage) {
+        System.out.println("fieldName = " + fieldName);
+        System.out.println("errorMessage = " + errorMessage);
+        System.out.println("11" + this.validation.getClass());
         this.validation.put(fieldName, errorMessage);
     }
 }
