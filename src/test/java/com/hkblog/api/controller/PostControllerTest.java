@@ -2,10 +2,8 @@ package com.hkblog.api.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hkblog.api.domain.Post;
-import com.hkblog.api.domain.PostEditor;
 import com.hkblog.api.repository.PostRepository;
 import com.hkblog.api.request.PostCreate;
-//import com.hkblog.api.request.PostEdit;
 import com.hkblog.api.request.PostEdit;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

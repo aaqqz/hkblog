@@ -1,0 +1,1 @@
+insert into `user_tb` (name, email, password, created_at) values ('hk', 'sswwx1@naver.com', '1234', '2023-01-01 01:01:01')

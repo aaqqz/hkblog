@@ -1,6 +1,6 @@
 package com.hkblog.api.controller;
 
-import com.hkblog.api.exception.InvalidRequest;
+import com.hkblog.api.config.data.UserSession;
 import com.hkblog.api.request.PostCreate;
 import com.hkblog.api.request.PostEdit;
 import com.hkblog.api.request.PostSearch;
@@ -21,9 +21,10 @@ public class PostController {
 
     private final PostService postService;
 
-    @GetMapping("/test")
-    public String test() {
-        return "hello";
+    @GetMapping("/foo")
+    public Long foo(UserSession userSession) {
+        log.info(">>>>> {}", userSession.id);
+        return userSession.id;
     }
 
     @PostMapping("/posts")
