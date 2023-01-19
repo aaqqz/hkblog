@@ -47,7 +47,7 @@ class PostControllerTest {
     }
 
     @Test
-    @DisplayName("/posts 요청시 primary-key 반환한다.")
+    @DisplayName("글 작성 요청시 primary-key 반환한다.")
     void test1() throws Exception {
         //given
         PostCreate request = PostCreate.builder()
@@ -68,7 +68,7 @@ class PostControllerTest {
     }
 
     @Test
-    @DisplayName("/posts 요청시 title값은 필수다.")
+    @DisplayName("글 작성 요청시 title값은 필수다.")
     void test2() throws Exception {
         // given
         PostCreate request = PostCreate.builder()
@@ -89,7 +89,7 @@ class PostControllerTest {
     }
 
     @Test
-    @DisplayName("/posts 요청시 DB에 값이 저장된다.")
+    @DisplayName("글 작성 요청시 DB에 값이 저장된다.")
     void test3() throws Exception {
         //given
         PostCreate request = PostCreate.builder()

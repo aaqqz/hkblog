@@ -96,13 +96,13 @@ public class PostControllerDocTest {
                                 fieldWithPath("title").description("제목")
                                         .attributes(key("constraint").value("좋은제목 입력해주세요.")),
                                 fieldWithPath("content").description("내용").optional()
-                        ),
-                        responseFields(
-                                fieldWithPath("postId").description("게시글 ID")
-//                                ,
-//                                fieldWithPath("title").description("제목"),
-//                                fieldWithPath("content").description("내용")
                         )
+//                        responseFields(
+//                                fieldWithPath("postId").description("게시글 ID")
+////                                ,
+////                                fieldWithPath("title").description("제목"),
+////                                fieldWithPath("content").description("내용")
+//                        )
                 ));
     }
 }

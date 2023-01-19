@@ -3,8 +3,7 @@ package com.hkblog.api.exception;
 import lombok.Getter;
 
 /**
- * status
- * -> 400
+ * status -> 400
  */
 @Getter
 public class InvalidRequest extends HkBlogException {

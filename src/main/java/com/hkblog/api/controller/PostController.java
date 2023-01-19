@@ -21,14 +21,17 @@ public class PostController {
 
     private final PostService postService;
 
+    @GetMapping("/test")
+    public String test() {
+        return "hello";
+    }
+
     @PostMapping("/posts")
     public Map<String, Long> post(@RequestBody @Valid PostCreate request) {
         request.validate();
-
         Long postId = postService.write(request);
         return Map.of("postId", postId);
     }
-
     @GetMapping("/posts/{postId}")
     public PostResponse get(@PathVariable Long postId) {
         return postService.get(postId);
