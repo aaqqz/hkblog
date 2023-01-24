@@ -20,6 +20,6 @@ public class AuthController {
     @PostMapping("/auth/login")
     public SessionResponse login(@RequestBody Login login) {
         String accessToken = authService.signin(login);
-        return new SessionResponse(accessToken );
+        return new SessionResponse(accessToken);
     }
 }

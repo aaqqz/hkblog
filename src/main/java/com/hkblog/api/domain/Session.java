@@ -1,22 +1,20 @@
 package com.hkblog.api.domain;
 
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Getter
+@ToString
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Session {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long Id;
+    private Long id;
 
     private String accessToken;
 

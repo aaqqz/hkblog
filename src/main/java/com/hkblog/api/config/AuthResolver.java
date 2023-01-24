@@ -1,14 +1,20 @@
 package com.hkblog.api.config;
 
 import com.hkblog.api.config.data.UserSession;
+import com.hkblog.api.domain.Session;
 import com.hkblog.api.exception.Unauthorized;
+import com.hkblog.api.repository.SessionRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.core.MethodParameter;
 import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
+@RequiredArgsConstructor
 public class AuthResolver implements HandlerMethodArgumentResolver {
+
+    private final SessionRepository sessionRepository;
 
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
@@ -22,9 +28,9 @@ public class AuthResolver implements HandlerMethodArgumentResolver {
             throw new Unauthorized();
         }
 
-        // 데이터베이스 사용자 확인작업
-        // ...
+        Session session = sessionRepository.findByAccessToken(accessToken)
+                .orElseThrow(() -> new Unauthorized());
 
-        return new UserSession(1L);
+        return new UserSession(session.getUser().getId());
     }
 }
