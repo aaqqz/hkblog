@@ -12,4 +12,4 @@ Content-Type: application/json
 
 GET http://localhost:8080/foo
 Content-Type: application/json
-Cookie: SESSION=533a593b-a032-413c-bd83-93f39dcce238
+Cookie: SESSION=eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJKb2UifQ.jjpZSUg2VBhoVU24dHGO7VrHLfYMxrzcjvFy9sbWva4

@@ -23,6 +23,7 @@ public class Session {
 
     @Builder
     public Session(User user) {
+        // this.id = user.getId();
         this.accessToken = UUID.randomUUID().toString();
         this.user = user;
     }
