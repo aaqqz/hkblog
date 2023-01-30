@@ -7,5 +7,5 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties(prefix = "hkblog-config")
 public class AppConfig {
 
-    public static String JwtKey;
+    public String JwtKey;
 }

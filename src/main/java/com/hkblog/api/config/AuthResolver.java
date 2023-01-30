@@ -21,6 +21,7 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 public class AuthResolver implements HandlerMethodArgumentResolver {
 
     private final SessionRepository sessionRepository;
+    private final AppConfig appConfig;
 
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
@@ -34,7 +35,7 @@ public class AuthResolver implements HandlerMethodArgumentResolver {
             throw new Unauthorized();
         }
 
-        byte[] decodedKey = Base64.decodeBase64(AppConfig.JwtKey);
+        byte[] decodedKey = Base64.decodeBase64(appConfig.JwtKey);
 
         try {
             Jws<Claims> claims = Jwts.parserBuilder()

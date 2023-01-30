@@ -22,12 +22,13 @@ import java.util.Base64;
 public class AuthController {
 
     private final AuthService authService;
+    private final AppConfig appConfig;
 
     @PostMapping("/auth/login")
     public SessionResponse login(@RequestBody Login login) {
         Long userId = authService.signin(login);
 
-        SecretKey key = Keys.hmacShaKeyFor(Base64.getDecoder().decode(AppConfig.JwtKey));
+        SecretKey key = Keys.hmacShaKeyFor(Base64.getDecoder().decode(appConfig.JwtKey));
 
         String jws = Jwts.builder()
                 .setSubject(String.valueOf(userId))
